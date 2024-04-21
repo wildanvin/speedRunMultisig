@@ -12,7 +12,7 @@
 
 ---
 
-## 📜 Quest Journal 🧭
+## 📜 Quest Journal
 
 In this challenge you'll have access to a fully functional Multisig Wallet for inspiration, unlike previous challenges where certain code sections were intentionally left incomplete.
 
