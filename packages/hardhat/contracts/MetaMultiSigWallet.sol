@@ -80,6 +80,7 @@ contract MetaMultiSigWallet {
         for (uint i = 0; i < signatures.length; i++) {
             address recovered = recover(_hash, signatures[i]);
             require(recovered > duplicateGuard, "executeTransaction: duplicate or unordered signatures");
+            //hvz I think here there is a vulnerability, 
             duplicateGuard = recovered;
             if(isOwner[recovered]){
               validSignatures++;
