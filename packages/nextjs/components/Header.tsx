@@ -27,6 +27,11 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/",
   },
   {
+    label: "My MultiSigs",
+    href: "/myMultiSigs",
+    icon: <PencilIcon className="h-4 w-4" />,
+  },
+  {
     label: "Multisig",
     href: "/multisig",
     icon: <PencilIcon className="h-4 w-4" />,
