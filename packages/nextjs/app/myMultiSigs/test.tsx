@@ -1,16 +1,12 @@
-"use client";
-
 import { type FC, useEffect, useState } from "react";
 import { getAccount } from "@wagmi/core";
-import { useIsMounted, useLocalStorage } from "usehooks-ts";
+import { useIsMounted } from "usehooks-ts";
 import { useWalletClient } from "wagmi";
-import { AddressInput, EtherInput, InputBase, IntegerInput } from "~~/components/scaffold-eth";
-import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import { AddressInput, IntegerInput } from "~~/components/scaffold-eth";
 
 const MyMultiSigs: FC = () => {
   const isMounted = useIsMounted();
   const account = getAccount();
-  // const initialAddress = account.address;
   const [addresses, setAddresses] = useState<string[]>([]);
 
   const { data: walletClient } = useWalletClient();
@@ -45,13 +41,7 @@ const MyMultiSigs: FC = () => {
             <label className="label">
               <span className="label-text">Signatures required</span>
             </label>
-            <IntegerInput
-              value="1"
-              onChange={() => {
-                null;
-              }}
-              placeholder={"loading..."}
-            />
+            <IntegerInput value="1" onChange={() => null} placeholder={"loading..."} />
           </div>
 
           <div className="flex flex-col gap-4">
@@ -62,26 +52,19 @@ const MyMultiSigs: FC = () => {
             </div>
 
             {addresses.map((address, index) => (
-              <div key={index} className="flex items-center space-x-2">
-                <div className="flex-grow">
-                  {" "}
-                  {/* AddressInput container */}
-                  <AddressInput
-                    // Ensure AddressInput takes the full width of its parent div
-                    disabled={index === 0}
-                    placeholder="Enter signer address"
-                    value={address}
-                    onChange={e => updateAddress(index, e.target.value)}
-                  />
-                </div>
+              <div key={index} className="flex gap-2">
+                <AddressInput
+                  disabled={index === 0}
+                  placeholder="Enter signer address"
+                  value={address}
+                  onChange={e => updateAddress(index, e)}
+                />
                 <button
-                  className={`flex items-center justify-center rounded-full h-6 w-6 text-xl leading-none p-0 ${
-                    index === 0 ? "bg-gray-400 text-gray-200" : "bg-red-500 text-white"
-                  }`} // Conditional styling for the button
+                  className="btn btn-error"
                   onClick={() => removeAddressInput(index)}
-                  disabled={index === 0} // Disable the first minus button
+                  disabled={addresses.length === 1} // **Added: Disable if only one input**
                 >
-                  &ndash; {/* En dash for the minus sign */}
+                  -
                 </button>
               </div>
             ))}
@@ -90,13 +73,7 @@ const MyMultiSigs: FC = () => {
               +
             </button>
 
-            <button
-              className="btn btn-secondary btn-sm"
-              disabled={!walletClient}
-              onClick={() => {
-                null;
-              }}
-            >
+            <button className="btn btn-secondary btn-sm" disabled={!walletClient} onClick={() => null}>
               Create
             </button>
           </div>
