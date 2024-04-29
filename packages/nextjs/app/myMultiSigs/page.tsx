@@ -1,6 +1,7 @@
 "use client";
 
 import { type FC, useEffect, useState } from "react";
+import { DisplayMultiSigs } from "./components/DisplayMultiSigs";
 import { getAccount } from "@wagmi/core";
 import { useIsMounted, useLocalStorage } from "usehooks-ts";
 import { useWalletClient } from "wagmi";
@@ -53,7 +54,9 @@ const MyMultiSigs: FC = () => {
 
   return isMounted() ? (
     <div className="flex flex-col flex-1 items-center my-20 gap-8">
+      <DisplayMultiSigs />
       <div className="flex items-center flex-col flex-grow w-full max-w-lg">
+        Create a new Multi Sig:
         <div className="flex flex-col bg-base-100 shadow-lg shadow-secondary border-8 border-secondary rounded-xl w-full p-6">
           <div>
             <label className="label">
