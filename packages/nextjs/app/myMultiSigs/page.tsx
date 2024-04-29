@@ -4,14 +4,15 @@ import { type FC, useEffect, useState } from "react";
 import { getAccount } from "@wagmi/core";
 import { useIsMounted, useLocalStorage } from "usehooks-ts";
 import { useWalletClient } from "wagmi";
-import { AddressInput, EtherInput, InputBase, IntegerInput } from "~~/components/scaffold-eth";
+import { AddressInput, IntegerInput } from "~~/components/scaffold-eth";
 import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 const MyMultiSigs: FC = () => {
   const isMounted = useIsMounted();
   const account = getAccount();
-  // const initialAddress = account.address;
+
   const [addresses, setAddresses] = useState<string[]>([]);
+  const [signaturesRequired, setSignaturesRequired] = useState<string | bigint>("1");
 
   const { data: walletClient } = useWalletClient();
 
@@ -37,6 +38,10 @@ const MyMultiSigs: FC = () => {
     setAddresses(addresses.filter((_, idx) => idx !== index));
   };
 
+  const handleSignaturesRequiredChange = (newValue: string | bigint) => {
+    setSignaturesRequired(newValue);
+  };
+
   return isMounted() ? (
     <div className="flex flex-col flex-1 items-center my-20 gap-8">
       <div className="flex items-center flex-col flex-grow w-full max-w-lg">
@@ -46,11 +51,10 @@ const MyMultiSigs: FC = () => {
               <span className="label-text">Signatures required</span>
             </label>
             <IntegerInput
-              value="1"
-              onChange={() => {
-                null;
-              }}
+              value={signaturesRequired.toString()}
+              onChange={e => handleSignaturesRequiredChange(e)}
               placeholder={"loading..."}
+              disableMultiplyBy1e18={true}
             />
           </div>
 
@@ -71,7 +75,7 @@ const MyMultiSigs: FC = () => {
                     disabled={index === 0}
                     placeholder="Enter signer address"
                     value={address}
-                    onChange={e => updateAddress(index, e.target.value)}
+                    onChange={e => updateAddress(index, e)}
                   />
                 </div>
                 <button
@@ -86,9 +90,15 @@ const MyMultiSigs: FC = () => {
               </div>
             ))}
 
-            <button className="btn btn-primary" onClick={addAddressInput}>
-              +
-            </button>
+            <div className="flex justify-center">
+              {" "}
+              <button
+                className="flex items-center justify-center rounded-full h-6 w-6 text-xl leading-none p-0 bg-green-500 text-white"
+                onClick={addAddressInput}
+              >
+                +
+              </button>
+            </div>
 
             <button
               className="btn btn-secondary btn-sm"
