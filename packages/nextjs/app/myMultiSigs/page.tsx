@@ -5,9 +5,10 @@ import { getAccount } from "@wagmi/core";
 import { useIsMounted, useLocalStorage } from "usehooks-ts";
 import { useWalletClient } from "wagmi";
 import { AddressInput, IntegerInput } from "~~/components/scaffold-eth";
-import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 const MyMultiSigs: FC = () => {
+  //STATE:
   const isMounted = useIsMounted();
   const account = getAccount();
 
@@ -41,6 +42,14 @@ const MyMultiSigs: FC = () => {
   const handleSignaturesRequiredChange = (newValue: string | bigint) => {
     setSignaturesRequired(newValue);
   };
+
+  //BLOCKCHAIN:
+  const { writeAsync, isLoading } = useScaffoldContractWrite({
+    contractName: "FactoryMultiSig",
+    functionName: "createMultiSig",
+    args: [addresses, BigInt(signaturesRequired)],
+    //const value = typeof newValue === 'string' ? parseInt(newValue, 10) : Number(newValue.toString());
+  });
 
   return isMounted() ? (
     <div className="flex flex-col flex-1 items-center my-20 gap-8">
@@ -103,8 +112,12 @@ const MyMultiSigs: FC = () => {
             <button
               className="btn btn-secondary btn-sm"
               disabled={!walletClient}
-              onClick={() => {
-                null;
+              onClick={async () => {
+                try {
+                  await writeAsync();
+                } catch (e) {
+                  console.error("Error creating MultiSig", e);
+                }
               }}
             >
               Create
