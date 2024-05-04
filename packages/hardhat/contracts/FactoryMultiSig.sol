@@ -25,4 +25,23 @@ contract FactoryMultiSig {
         emit MultiSigWalletCreated(address(mmsw), msg.sender);
         return address(mmsw);
     }
+
+    // 
+    function getOwnedMultiSigs(address _owner) public view returns (address[] memory) {
+        address[] memory ownedMS = new address[](mmswArray.length);
+        uint count = 0;
+        
+        for (uint i = 0; i < mmswArray.length; ++i) {
+            if (mmswArray[i].isOwner(_owner)){
+                ownedMS[count++] = address(mmswArray[i]);
+            }
+        }
+        
+        // Resize the memory array to fit the actual number of owned multisigs
+        address[] memory result = new address[](count);
+        for (uint i = 0; i < count; ++i) {
+            result[i] = ownedMS[i];
+        }
+        return result;
+    }
 }
