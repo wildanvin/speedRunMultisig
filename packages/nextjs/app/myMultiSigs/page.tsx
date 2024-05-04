@@ -53,7 +53,7 @@ const MyMultiSigs: FC = () => {
   });
 
   return isMounted() ? (
-    <div className="flex flex-col flex-1 items-center my-20 gap-8">
+    <div className="flex flex-col items-center mb-20">
       <DisplayMultiSigs />
       <div className="flex items-center flex-col flex-grow w-full max-w-lg">
         Create a new Multi Sig:
