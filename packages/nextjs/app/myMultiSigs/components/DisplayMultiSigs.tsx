@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { getAccount } from "@wagmi/core";
+import { useLocalStorage } from "usehooks-ts";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 export const DisplayMultiSigs: React.FC = () => {
-  const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
+  // const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
+  const [selectedMS, setSelectedMS] = useLocalStorage<string | null>("selectedMS", null);
+
   const account = getAccount();
 
   const handleSelectionChange = (address: string): void => {
-    setSelectedWallet(prevSelectedWallet => (prevSelectedWallet === address ? null : address));
+    // setSelectedWallet(prevSelectedWallet => (prevSelectedWallet === address ? null : address));
+    setSelectedMS(prevSelectedWallet => (prevSelectedWallet === address ? null : address));
   };
 
   const { data: ownedMS } = useScaffoldContractRead({
@@ -16,8 +20,6 @@ export const DisplayMultiSigs: React.FC = () => {
     functionName: "getOwnedMultiSigs",
     args: [account?.address],
   });
-
-  console.table(ownedMS);
 
   return (
     <div className="flex flex-col flex-1 items-center mb-20 mt-12 gap-8">
@@ -38,7 +40,7 @@ export const DisplayMultiSigs: React.FC = () => {
                           type="checkbox"
                           className="peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-gray-200 transition-all before:absolute before:top-1/2 before:left-1/2 before:block before:h-12 before:w-12 before:-translate-y-1/2 before:-translate-x-1/2 before:rounded-full before:bg-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 hover:before:opacity-10"
                           id={`check-${index}`}
-                          checked={selectedWallet === address}
+                          checked={selectedMS === address}
                           onChange={() => handleSelectionChange(address)}
                         />
                         <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 peer-checked:opacity-100">
