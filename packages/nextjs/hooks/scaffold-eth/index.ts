@@ -11,7 +11,6 @@ export * from "./useScaffoldContractWrite";
 export * from "./useScaffoldEventSubscriber";
 export * from "./useScaffoldEventHistory";
 export { useScaffoldEventHistoryCustom } from "./useScaffoldEventHistoryCustom";
-// export * from "./useScaffoldEventHistoryCustomGPT";
 export * from "./useTransactor";
 export * from "./useFetchBlocks";
 export * from "./useContractLogs";

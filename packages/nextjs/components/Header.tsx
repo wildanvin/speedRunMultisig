@@ -11,6 +11,7 @@ import {
   CheckBadgeIcon,
   PencilIcon,
   PlusCircleIcon,
+  QrCodeIcon,
 } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
@@ -32,9 +33,9 @@ export const menuLinks: HeaderMenuLink[] = [
     icon: <PencilIcon className="h-4 w-4" />,
   },
   {
-    label: "Multisig",
+    label: "QR & Events",
     href: "/multisig",
-    icon: <PencilIcon className="h-4 w-4" />,
+    icon: <QrCodeIcon className="h-4 w-4" />,
   },
   {
     label: "Owners",
