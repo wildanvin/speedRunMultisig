@@ -24,7 +24,7 @@ export const DisplayMultiSigs: React.FC = () => {
   return (
     <div className="flex flex-col flex-1 items-center mb-20 mt-12 gap-8">
       <div className="flex items-center flex-col flex-grow w-full max-w-lg">
-        Your Multisigs:
+        Your Multi Sigs:
         <div className="flex flex-col bg-base-100 shadow-lg shadow-secondary border-8 border-secondary rounded-xl w-full p-6">
           {ownedMS && ownedMS.length > 0 ? (
             <div className="flex flex-col gap-4">
