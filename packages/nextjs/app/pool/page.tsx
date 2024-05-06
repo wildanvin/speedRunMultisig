@@ -2,45 +2,59 @@
 
 import { type FC, useMemo, useState } from "react";
 import { TransactionData, getPoolServerUrl } from "../create/page";
-import { useInterval } from "usehooks-ts";
+import { useInterval, useReadLocalStorage } from "usehooks-ts";
 import { useChainId } from "wagmi";
 import { TransactionItem } from "~~/components/TransactionItem";
 import {
   useDeployedContractInfo,
-  useScaffoldContract,
-  useScaffoldContractRead,
-  useScaffoldEventHistory,
-  useScaffoldEventSubscriber,
+  useScaffoldContractCustom,
+  useScaffoldContractReadCustom,
+  useScaffoldEventHistoryCustom,
+  useScaffoldEventSubscriberCustom,
 } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { notification } from "~~/utils/scaffold-eth";
 
 const Pool: FC = () => {
+  const selectedMS = useReadLocalStorage("selectedMS")?.toString();
+
+  if (!selectedMS) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <h1 className="text-2xl font-bold">Select a Multi Sig or create one</h1>
+      </div>
+    );
+  }
+
   const [transactions, setTransactions] = useState<TransactionData[]>();
   const [subscriptionEventsHashes, setSubscriptionEventsHashes] = useState<`0x${string}`[]>([]);
   const { targetNetwork } = useTargetNetwork();
   const poolServerUrl = getPoolServerUrl(targetNetwork.id);
   const { data: contractInfo } = useDeployedContractInfo("MetaMultiSigWallet");
   const chainId = useChainId();
-  const { data: nonce } = useScaffoldContractRead({
+  const { data: nonce } = useScaffoldContractReadCustom({
     contractName: "MetaMultiSigWallet",
+    contractAddress: selectedMS,
     functionName: "nonce",
   });
 
-  const { data: eventsHistory } = useScaffoldEventHistory({
+  const { data: eventsHistory } = useScaffoldEventHistoryCustom({
     contractName: "MetaMultiSigWallet",
+    contractAddress: selectedMS,
     eventName: "ExecuteTransaction",
     fromBlock: 0n,
   });
 
-  const { data: metaMultiSigWallet } = useScaffoldContract({
+  const { data: metaMultiSigWallet } = useScaffoldContractCustom({
     contractName: "MetaMultiSigWallet",
+    contractAddress: selectedMS,
   });
 
   const historyHashes = useMemo(() => eventsHistory?.map(ev => ev.log.args.hash) || [], [eventsHistory]);
 
-  useScaffoldEventSubscriber({
+  useScaffoldEventSubscriberCustom({
     contractName: "MetaMultiSigWallet",
+    contractAddress: selectedMS,
     eventName: "ExecuteTransaction",
     listener: logs => {
       logs.map(log => {
@@ -57,7 +71,7 @@ const Pool: FC = () => {
     const getTransactions = async () => {
       try {
         const res: { [key: string]: TransactionData } = await (
-          await fetch(`${poolServerUrl}${contractInfo?.address}_${chainId}`)
+          await fetch(`${poolServerUrl}${selectedMS}_${chainId}`)
         ).json();
 
         const newTransactions: TransactionData[] = [];

@@ -11,6 +11,7 @@ export * from "./useScaffoldContractRead";
 export * from "./useScaffoldContractReadCustom";
 export * from "./useScaffoldContractWrite";
 export * from "./useScaffoldEventSubscriber";
+export * from "./useScaffoldEventSubscriberCustom";
 export * from "./useScaffoldEventHistory";
 export { useScaffoldEventHistoryCustom } from "./useScaffoldEventHistoryCustom";
 export * from "./useTransactor";
