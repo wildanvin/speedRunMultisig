@@ -6,6 +6,7 @@ export * from "./useNativeCurrencyPrice";
 export * from "./useNetworkColor";
 export * from "./useOutsideClick";
 export * from "./useScaffoldContract";
+export * from "./useScaffoldContractCustom";
 export * from "./useScaffoldContractRead";
 export * from "./useScaffoldContractReadCustom";
 export * from "./useScaffoldContractWrite";

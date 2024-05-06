@@ -3,12 +3,16 @@
 import { type FC, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DEFAULT_TX_DATA, METHODS, Method, PredefinedTxData } from "../owners/page";
-import { useIsMounted, useLocalStorage } from "usehooks-ts";
+import { useIsMounted, useLocalStorage, useReadLocalStorage } from "usehooks-ts";
 import { Address, parseEther } from "viem";
 import { useChainId, useWalletClient } from "wagmi";
 import * as chains from "wagmi/chains";
 import { AddressInput, EtherInput, InputBase } from "~~/components/scaffold-eth";
-import { useDeployedContractInfo, useScaffoldContract, useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import {
+  useDeployedContractInfo,
+  useScaffoldContractCustom,
+  useScaffoldContractReadCustom,
+} from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { notification } from "~~/utils/scaffold-eth";
 
@@ -32,6 +36,17 @@ export const getPoolServerUrl = (id: number) =>
 const CreatePage: FC = () => {
   const isMounted = useIsMounted();
   const router = useRouter();
+
+  const selectedMS = useReadLocalStorage("selectedMS")?.toString();
+
+  if (!selectedMS) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <h1 className="text-2xl font-bold">Select a Multi Sig or create one</h1>
+      </div>
+    );
+  }
+
   const chainId = useChainId();
   const { data: walletClient } = useWalletClient();
   const { targetNetwork } = useTargetNetwork();
@@ -39,7 +54,7 @@ const CreatePage: FC = () => {
   const poolServerUrl = getPoolServerUrl(targetNetwork.id);
 
   const [ethValue, setEthValue] = useState("");
-  const { data: contractInfo } = useDeployedContractInfo("MetaMultiSigWallet");
+  // const { data: contractInfo } = useDeployedContractInfo("MetaMultiSigWallet");
 
   const [predefinedTxData, setPredefinedTxData] = useLocalStorage<PredefinedTxData>("predefined-tx-data", {
     methodName: "transferFunds",
@@ -48,20 +63,23 @@ const CreatePage: FC = () => {
     amount: "0",
   });
 
-  const { data: nonce } = useScaffoldContractRead({
+  const { data: nonce } = useScaffoldContractReadCustom({
     contractName: "MetaMultiSigWallet",
+    contractAddress: selectedMS,
     functionName: "nonce",
   });
 
-  const { data: signaturesRequired } = useScaffoldContractRead({
+  const { data: signaturesRequired } = useScaffoldContractReadCustom({
     contractName: "MetaMultiSigWallet",
+    contractAddress: selectedMS,
     functionName: "signaturesRequired",
   });
 
-  const txTo = predefinedTxData.methodName === "transferFunds" ? predefinedTxData.signer : contractInfo?.address;
+  const txTo = predefinedTxData.methodName === "transferFunds" ? predefinedTxData.signer : selectedMS;
 
-  const { data: metaMultiSigWallet } = useScaffoldContract({
+  const { data: metaMultiSigWallet } = useScaffoldContractCustom({
     contractName: "MetaMultiSigWallet",
+    contractAddress: selectedMS,
   });
 
   const handleCreate = async () => {
@@ -87,13 +105,13 @@ const CreatePage: FC = () => {
       const isOwner = await metaMultiSigWallet?.read.isOwner([recover]);
 
       if (isOwner) {
-        if (!contractInfo?.address || !predefinedTxData.amount || !txTo) {
+        if (!selectedMS || !predefinedTxData.amount || !txTo) {
           return;
         }
 
         const txData: TransactionData = {
           chainId: chainId,
-          address: contractInfo.address,
+          address: selectedMS,
           nonce: nonce || 0n,
           to: txTo,
           amount: predefinedTxData.amount,
