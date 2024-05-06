@@ -7,6 +7,7 @@ export * from "./useNetworkColor";
 export * from "./useOutsideClick";
 export * from "./useScaffoldContract";
 export * from "./useScaffoldContractRead";
+export * from "./useScaffoldContractReadCustom";
 export * from "./useScaffoldContractWrite";
 export * from "./useScaffoldEventSubscriber";
 export * from "./useScaffoldEventHistory";

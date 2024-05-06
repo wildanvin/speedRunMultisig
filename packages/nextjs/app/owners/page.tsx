@@ -2,10 +2,14 @@
 
 import { type FC, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useIsMounted, useLocalStorage } from "usehooks-ts";
+import { useIsMounted, useLocalStorage, useReadLocalStorage } from "usehooks-ts";
 import { Abi, encodeFunctionData } from "viem";
 import { Address, AddressInput, IntegerInput } from "~~/components/scaffold-eth";
-import { useDeployedContractInfo, useScaffoldContractRead, useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
+import {
+  useDeployedContractInfo,
+  useScaffoldContractReadCustom,
+  useScaffoldEventHistoryCustom,
+} from "~~/hooks/scaffold-eth";
 
 export type Method = "addSigner" | "removeSigner" | "transferFunds";
 export const METHODS: Method[] = ["addSigner", "removeSigner", "transferFunds"];
@@ -31,6 +35,16 @@ const Owners: FC = () => {
 
   const router = useRouter();
 
+  const selectedMS = useReadLocalStorage("selectedMS")?.toString();
+
+  if (!selectedMS) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <h1 className="text-2xl font-bold">Select a Multi Sig or create one</h1>
+      </div>
+    );
+  }
+
   const [predefinedTxData, setPredefinedTxData] = useLocalStorage<PredefinedTxData>(
     "predefined-tx-data",
     DEFAULT_TX_DATA,
@@ -38,13 +52,15 @@ const Owners: FC = () => {
 
   const { data: contractInfo } = useDeployedContractInfo("MetaMultiSigWallet");
 
-  const { data: signaturesRequired } = useScaffoldContractRead({
+  const { data: signaturesRequired } = useScaffoldContractReadCustom({
     contractName: "MetaMultiSigWallet",
+    contractAddress: selectedMS,
     functionName: "signaturesRequired",
   });
 
-  const { data: ownerEventsHistory } = useScaffoldEventHistory({
+  const { data: ownerEventsHistory } = useScaffoldEventHistoryCustom({
     contractName: "MetaMultiSigWallet",
+    contractAddress: selectedMS,
     eventName: "Owner",
     fromBlock: 0n,
   });
@@ -116,7 +132,7 @@ const Owners: FC = () => {
                   ...predefinedTxData,
                   callData,
                   amount: "0",
-                  to: contractInfo?.address,
+                  to: selectedMS,
                 });
 
                 setTimeout(() => {
