@@ -4,7 +4,7 @@ import { type FC, useMemo, useState } from "react";
 import { TransactionData, getPoolServerUrl } from "../create/page";
 import { useInterval, useReadLocalStorage } from "usehooks-ts";
 import { useChainId } from "wagmi";
-import { TransactionItem } from "~~/components/TransactionItem";
+import { TransactionItemCustom } from "~~/components/TransactionItemCustom";
 import {
   useDeployedContractInfo,
   useScaffoldContractCustom,
@@ -130,7 +130,7 @@ const Pool: FC = () => {
               ? "Loading..."
               : transactions.map(tx => {
                   return (
-                    <TransactionItem
+                    <TransactionItemCustom
                       key={tx.hash}
                       tx={tx}
                       completed={allEvents.includes(tx.hash as `0x${string}`)}
