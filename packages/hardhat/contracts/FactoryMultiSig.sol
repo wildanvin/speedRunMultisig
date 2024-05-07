@@ -10,6 +10,7 @@ contract FactoryMultiSig {
     uint256 public immutable CHAIN_ID;
 
     event MultiSigWalletCreated(address indexed walletAddress, address indexed creator);
+    error CantFund();
 
     constructor(uint256 _chainId ){
         CHAIN_ID = _chainId;
@@ -21,9 +22,17 @@ contract FactoryMultiSig {
         
         MetaMultiSigWallet mmsw = new MetaMultiSigWallet(CHAIN_ID, _owners, _signaturesRequired);
         mmswArray.push(mmsw);
+        fund(address(mmsw));
         
         emit MultiSigWalletCreated(address(mmsw), msg.sender);
         return address(mmsw);
+    }
+
+    function fund (address _wallet) private {
+        if (address(this).balance >= 0.1 ether){
+            (bool sent,) = _wallet.call{value: 0.1 ether}("");
+            if (!sent) revert CantFund();
+        }
     }
 
     // 
