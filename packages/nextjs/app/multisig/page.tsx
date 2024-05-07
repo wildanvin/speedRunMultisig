@@ -32,7 +32,7 @@ const Multisig: FC = () => {
     contractName: "MetaMultiSigWallet",
     contractAddress: selectedMS,
     eventName: "ExecuteTransaction",
-    fromBlock: 0n,
+    fromBlock: 5852713n,
   });
 
   return (

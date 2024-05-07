@@ -4,6 +4,12 @@
 
 This is my implementation for the multisig challenge of the BuidlGuidl. You can create multiple MultiSigs and interact with them.
 
+Nothing to compile
+No need to generate any newer typings.
+reusing "MetaMultiSigWallet" at 0x6D413220ba11A964dC92a9bC825119EEe79682E2
+deploying "FactoryMultiSig" (tx: 0xab244d5579ea3270f90a60921ea888c30ed8b222fb9915a9aef113b232ad9042)...: deployed at 0xEa183eBa99aB3395a66FdcE145E2456C51836e0e with 2010959 gas
+📝 Updated TypeScript contract definition file on ../nextjs/contracts/deployedContracts.ts
+
 👩‍👩‍👧‍👧 A multisig wallet is a smart contract that acts like a wallet, allowing us to secure assets by requiring multiple accounts to "vote" on transactions. Think of it as a treasure chest that can only be opened when all key parties agree.
 
 📜 The contract keeps track of all transactions. Each transaction can be confirmed or rejected by the signers (smart contract owners). Only transactions that receive enough confirmations can be "executed" by the signers.

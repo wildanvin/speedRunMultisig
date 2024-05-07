@@ -62,7 +62,7 @@ const Owners: FC = () => {
     contractName: "MetaMultiSigWallet",
     contractAddress: selectedMS,
     eventName: "Owner",
-    fromBlock: 0n,
+    fromBlock: 5852713n,
   });
 
   useEffect(() => {
