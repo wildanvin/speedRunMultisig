@@ -2,7 +2,7 @@
 
 ![readme-6](https://github.com/scaffold-eth/se-2-challenges/assets/55535804/577a8abd-a098-499f-9903-fb6e4c9337e9)
 
-This is my implementation for the multisig challenge of the BuidlGuidl. You can create multiple MultiSigs and interact with them.
+This is my implementation for the multisig challenge of the BuidlGuidl. You can create multiple MultiSigs and interact with them. Try it [here](https://speed-run-multisig-nextjs.vercel.app/).
 
 👩‍👩‍👧‍👧 A multisig wallet is a smart contract that acts like a wallet, allowing us to secure assets by requiring multiple accounts to "vote" on transactions. Think of it as a treasure chest that can only be opened when all key parties agree.
 
