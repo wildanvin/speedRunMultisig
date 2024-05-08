@@ -53,4 +53,6 @@ contract FactoryMultiSig {
         }
         return result;
     }
+
+    receive() external payable {}
 }

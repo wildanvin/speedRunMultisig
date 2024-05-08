@@ -5,9 +5,9 @@
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
-  31337: {
+  11155111: {
     FactoryMultiSig: {
-      address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      address: "0x2A08a865e3e9667e58abFCCfDee2689CBF38d320",
       abi: [
         {
           inputs: [
@@ -123,7 +123,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     MetaMultiSigWallet: {
-      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      address: "0x6D413220ba11A964dC92a9bC825119EEe79682E2",
       abi: [
         {
           inputs: [
@@ -611,7 +611,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
   },
-  11155111: {
+  11155420: {
     FactoryMultiSig: {
       address: "0xEa183eBa99aB3395a66FdcE145E2456C51836e0e",
       abi: [
